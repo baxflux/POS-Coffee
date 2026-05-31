@@ -1,0 +1,6 @@
+# Vercel
+.vercel/
+
+# Claude Code local settings
+settings.local.json
+.vercel
