@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { SessionPanel } from "@/components/auth/session-panel"
 
 const featureHighlights = [
   {
@@ -99,6 +100,8 @@ export default function HomePage() {
             </Card>
           ))}
         </section>
+
+        <SessionPanel />
 
         <footer className="text-muted-foreground border-border/60 mt-8 flex flex-col gap-2 border-t pt-6 text-sm md:flex-row md:items-center md:justify-between">
           <span>
