@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react"
 import { CreditCard, Receipt, ShoppingBag, Trash2 } from "lucide-react"
+import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 
 import { ConfirmDialog } from "@/components/menu/confirm-dialog"
@@ -23,9 +24,10 @@ interface OrderSummaryProps {
  *
  * Shows every line item, exposes quantity controls + notes, totals, and the
  * Clear / Pay buttons. The Pay button stays disabled until at least one line
- * is in the order.
+ * is in the order. Clicking Pay navigates to the /payment screen.
  */
 export function OrderSummary({ variant = "panel" }: OrderSummaryProps) {
+  const router = useRouter()
   const items = useCartStore((state) => state.items)
   const updateQuantity = useCartStore((state) => state.updateQuantity)
   const updateNotes = useCartStore((state) => state.updateNotes)
@@ -186,9 +188,7 @@ export function OrderSummary({ variant = "panel" }: OrderSummaryProps) {
           size="lg"
           disabled={isEmpty}
           data-testid="pay-button"
-          onClick={() =>
-            toast.info("Payment flow lands in PC-7. Your order is ready.")
-          }
+          onClick={() => router.push("/payment")}
         >
           <CreditCard className="size-4" aria-hidden="true" />
           Pay {!isEmpty ? formatCurrency(totals.total) : null}
