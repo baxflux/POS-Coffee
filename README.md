@@ -1,6 +1,6 @@
 # POS-Coffee ☕
 
-A clean, modern, web-based Point of Sale system for a small coffee shop — built as a lightweight MVP deployable on Vercel.
+A clean, modern, web-based Point of Sale (POS) system for a small coffee shop — built as a lightweight MVP deployable on Vercel.
 
 ## Live Demo
 
