@@ -18,6 +18,12 @@ interface MenuState {
   modifiers: Modifier[]
   /** True once the seed run has executed (or persisted state was hydrated). */
   isSeeded: boolean
+  /**
+   * True once the persisted snapshot has been merged into memory. The Menu
+   * workspace checks this before rendering so admin edits never flash an
+   * unseeded UI on first paint.
+   */
+  hasHydrated: boolean
 }
 
 interface MenuActions {
@@ -25,6 +31,7 @@ interface MenuActions {
   seedIfEmpty: () => void
   /** Wipe and re-seed. Useful for tests and Admin "reset demo data". */
   resetToSeed: () => void
+  setHasHydrated: (value: boolean) => void
   addCategory: (category: Category) => void
   updateCategory: (id: string, patch: Partial<Omit<Category, "id">>) => void
   removeCategory: (id: string) => void
@@ -43,6 +50,7 @@ const initialState: MenuState = {
   products: [],
   modifiers: [],
   isSeeded: false,
+  hasHydrated: false,
 }
 
 export const useMenuStore = create<MenuStore>()(
@@ -76,6 +84,8 @@ export const useMenuStore = create<MenuStore>()(
           modifiers: SEED_MODIFIERS,
           isSeeded: true,
         }),
+
+      setHasHydrated: (value) => set({ hasHydrated: value }),
 
       addCategory: (category) =>
         set((state) => ({ categories: [...state.categories, category] })),
@@ -141,9 +151,18 @@ export const useMenuStore = create<MenuStore>()(
       name: "pos-coffee-menu",
       storage: createJSONStorage(() => localStorage),
       version: 1,
-      // Run the seed automatically once the persisted snapshot has loaded.
+      // Only persist the menu data — transient flags stay in memory.
+      partialize: (state) => ({
+        categories: state.categories,
+        products: state.products,
+        modifiers: state.modifiers,
+        isSeeded: state.isSeeded,
+      }),
+      // Run the seed automatically once the persisted snapshot has loaded,
+      // then mark hydration complete so the Menu workspace can render.
       onRehydrateStorage: () => (state) => {
         state?.seedIfEmpty()
+        state?.setHasHydrated(true)
       },
     }
   )
