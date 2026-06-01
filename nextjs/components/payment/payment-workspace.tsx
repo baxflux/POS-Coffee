@@ -58,7 +58,12 @@ export function PaymentWorkspace() {
   const tax = 0 // MVP — no tax
   const total = subtotal + tax
 
-  const commitOrder = () => {
+  /**
+   * Finalise an order and navigate to the receipt.
+   * `tenderedAmount` is only provided for cash payments — it is forwarded
+   * as a query param so the receipt can display change due.
+   */
+  const commitOrder = (tenderedAmount?: number) => {
     if (orderCreatedRef.current) return
     if (!session) {
       toast.error("You must be logged in to process a payment.")
@@ -78,12 +83,17 @@ export function PaymentWorkspace() {
     toast.success(
       `Order ${order.ticketNumber} placed — ${formatCurrency(order.total)}.`
     )
-    router.push("/orders")
+
+    const receiptUrl =
+      tenderedAmount !== undefined
+        ? `/receipt/${order.id}?tendered=${tenderedAmount.toFixed(2)}`
+        : `/receipt/${order.id}`
+    router.push(receiptUrl)
   }
 
-  const handleCashComplete = () => {
+  const handleCashComplete = (tenderedAmount: number) => {
     if (orderCreatedRef.current || isProcessing) return
-    commitOrder()
+    commitOrder(tenderedAmount)
   }
 
   const handleCardMobileComplete = () => {
@@ -106,7 +116,7 @@ export function PaymentWorkspace() {
       toast.success(
         `Order ${order.ticketNumber} placed — ${formatCurrency(order.total)}.`
       )
-      router.push("/orders")
+      router.push(`/receipt/${order.id}`)
     }, PROCESSING_DELAY_MS)
   }
 

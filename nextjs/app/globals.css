@@ -161,3 +161,44 @@
     @apply font-sans;
   }
 }
+
+/* -----------------------------------------------------------------------
+ * Print styles — thermal receipt layout.
+ *
+ * When window.print() is called from the receipt page:
+ *   - Hide everything marked `.no-print` (nav, sidebar, action buttons).
+ *   - Show only `.receipt-print-area` at full width, no shadows, no
+ *     rounded corners so it fills the paper/thermal roll cleanly.
+ * ---------------------------------------------------------------------- */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  /* Reset page margins for a tight thermal-receipt fit */
+  @page {
+    margin: 8mm;
+  }
+
+  body {
+    background: white !important;
+    color: black !important;
+  }
+
+  /* Make the receipt card fill the printable area */
+  .receipt-print-area {
+    box-shadow: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* Flatten background colours so thermal printers render text clearly */
+  .receipt-print-area * {
+    background: white !important;
+    color: black !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
