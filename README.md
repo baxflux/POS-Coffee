@@ -4,7 +4,7 @@ A clean, modern, web-based Point of Sale system for a small coffee shop — buil
 
 ## Live Demo
 
-> Deploy your own in one click using the button below, or visit the live instance once deployed.
+**[https://pos-coffee-neon.vercel.app](https://pos-coffee-neon.vercel.app)**
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/baxflux/POS-Coffee&root-directory=nextjs)
 
