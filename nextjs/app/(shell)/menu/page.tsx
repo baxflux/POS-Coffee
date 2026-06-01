@@ -1,23 +1,17 @@
 import type { Metadata } from "next"
-import { LayoutGrid } from "lucide-react"
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+import { MenuWorkspace } from "@/components/menu/menu-workspace"
 
 export const metadata: Metadata = {
   title: "Menu management",
-  description: "Admin-only menu management workspace (placeholder for PC-5).",
+  description:
+    "Admin-only workspace to manage categories, products, and modifiers.",
 }
 
 export default function MenuPage() {
   return (
-    <section className="mx-auto flex w-full max-w-5xl flex-col gap-8 px-4 py-8 md:px-8 md:py-12">
-      <header className="flex flex-col gap-3">
+    <section className="mx-auto flex w-full max-w-6xl flex-col gap-8 px-4 py-8 md:px-8 md:py-12">
+      <header className="flex flex-col gap-2">
         <span className="text-muted-foreground text-xs font-semibold tracking-[0.2em] uppercase">
           POS-Coffee · Admin
         </span>
@@ -25,31 +19,12 @@ export default function MenuPage() {
           Menu management
         </h1>
         <p className="text-muted-foreground max-w-2xl text-base leading-relaxed">
-          Admin-only placeholder. The full menu management workspace
-          (categories, products, modifiers) lands in PC-5. Cashiers who try
-          to reach this URL are redirected to the Not authorized screen by
-          the route guard.
+          Add, edit, and organise the products cashiers can sell. Changes are
+          saved to this browser and reflected immediately on the Order screen.
         </p>
       </header>
 
-      <Card className="border-border/70 bg-card/80 max-w-2xl">
-        <CardHeader>
-          <span
-            aria-hidden="true"
-            className="bg-secondary text-secondary-foreground inline-flex size-10 items-center justify-center rounded-xl"
-          >
-            <LayoutGrid className="size-5" />
-          </span>
-          <CardTitle className="mt-3 text-base">Menu workspace</CardTitle>
-          <CardDescription>
-            Categories, products, and modifiers will be editable here.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="text-muted-foreground text-sm">
-          For PC-4 this page confirms the admin-only nav link routes here
-          and that cashier sessions cannot reach it.
-        </CardContent>
-      </Card>
+      <MenuWorkspace />
     </section>
   )
 }
