@@ -28,7 +28,8 @@ interface RouteGuardProps {
  *  2. Redirects unauthenticated visits to `/login`.
  *  3. Sends already-logged-in users away from `/login` to their role's
  *     landing page.
- *  4. Blocks cashier sessions from admin-only routes (e.g. /menu, /report).
+ *  4. Redirects cashier sessions hitting admin-only routes to a dedicated
+ *     "Not authorized" page so the denial is explicit, not silent.
  */
 export function RouteGuard({ children }: RouteGuardProps) {
   const router = useRouter()
@@ -38,25 +39,27 @@ export function RouteGuard({ children }: RouteGuardProps) {
   const hasHydrated = useAuthStore((state) => state.hasHydrated)
 
   const onPublicRoute = isPublicRoute(pathname)
+  const onNotAuthorized = pathname === ROUTES.notAuthorized
 
   useEffect(() => {
     if (!hasHydrated) return
 
     // Visitor without a session trying to reach a protected page → /login.
+    // The Not authorized page is public so it can render even after logout.
     if (!session && !onPublicRoute) {
       router.replace(ROUTES.login)
       return
     }
 
     // Logged-in user hitting /login → route to their home screen.
-    if (session && onPublicRoute) {
+    if (session && pathname === ROUTES.login) {
       router.replace(getHomeRouteForRole(session.role))
       return
     }
 
-    // Cashier trying to reach an admin-only route → bounce home.
+    // Cashier trying to reach an admin-only route → Not authorized page.
     if (session && session.role !== "admin" && isAdminOnlyRoute(pathname)) {
-      router.replace(getHomeRouteForRole(session.role))
+      router.replace(ROUTES.notAuthorized)
     }
   }, [hasHydrated, session, onPublicRoute, pathname, router])
 
@@ -80,7 +83,7 @@ export function RouteGuard({ children }: RouteGuardProps) {
     session !== null &&
     session.role !== "admin" &&
     isAdminOnlyRoute(pathname)
-  const loggedInOnLogin = session !== null && onPublicRoute
+  const loggedInOnLogin = session !== null && pathname === ROUTES.login
 
   if (sessionBlocked || cashierBlocked || loggedInOnLogin) {
     return (
@@ -93,6 +96,11 @@ export function RouteGuard({ children }: RouteGuardProps) {
         <span className="sr-only">Redirecting…</span>
       </div>
     )
+  }
+
+  // The Not authorized page renders its own messaging — no extra wrapping.
+  if (onNotAuthorized) {
+    return <>{children}</>
   }
 
   return <>{children}</>
