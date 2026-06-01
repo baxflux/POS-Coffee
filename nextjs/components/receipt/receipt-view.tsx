@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { formatCurrency } from "@/lib/order-validation"
 import { roundCurrency } from "@/lib/totals"
+import { useCartStore } from "@/stores"
 import type { Order } from "@/types"
 
 interface ReceiptViewProps {
@@ -44,6 +45,7 @@ function PaymentMethodIcon({ method }: { method: string }) {
  */
 export function ReceiptView({ order, tenderedAmount }: ReceiptViewProps) {
   const router = useRouter()
+  const clearCart = useCartStore((state) => state.clear)
 
   const change =
     order.paymentMethod === "cash" && tenderedAmount !== undefined
@@ -55,20 +57,18 @@ export function ReceiptView({ order, tenderedAmount }: ReceiptViewProps) {
   }
 
   const handleNewOrder = () => {
+    clearCart()
     router.push("/order")
   }
 
   const handleBack = () => {
-    router.back()
+    router.push("/order")
   }
 
   return (
     <div className="mx-auto flex max-w-lg flex-col gap-6">
       {/* Action bar — hidden during print */}
-      <div
-        className="no-print flex items-center justify-between gap-3"
-        aria-hidden="false"
-      >
+      <div className="no-print flex items-center justify-between gap-3">
         <Button
           type="button"
           variant="ghost"
@@ -276,10 +276,7 @@ export function ReceiptView({ order, tenderedAmount }: ReceiptViewProps) {
       </div>
 
       {/* Bottom action bar — hidden during print */}
-      <div
-        className="no-print flex justify-center gap-3"
-        aria-hidden="false"
-      >
+      <div className="no-print flex justify-center gap-3">
         <Button
           type="button"
           variant="outline"

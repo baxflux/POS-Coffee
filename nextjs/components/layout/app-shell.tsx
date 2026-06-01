@@ -81,7 +81,7 @@ export function AppShell({ children }: AppShellProps) {
       <div className="flex flex-1">
         <aside
           aria-label="Primary navigation"
-          className="border-border/70 bg-sidebar text-sidebar-foreground hidden w-60 shrink-0 border-r md:flex md:flex-col"
+          className="no-print border-border/70 bg-sidebar text-sidebar-foreground hidden w-60 shrink-0 border-r md:flex md:flex-col"
         >
           <SidebarNav role={session.role} />
         </aside>

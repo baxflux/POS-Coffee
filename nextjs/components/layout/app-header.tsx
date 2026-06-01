@@ -36,7 +36,7 @@ export function AppHeader({ mobileNavOpen, onToggleMobileNav }: AppHeaderProps) 
   return (
     <header
       data-slot="app-header"
-      className="border-border/70 bg-background/95 supports-[backdrop-filter]:bg-background/80 sticky top-0 z-30 flex h-16 items-center gap-3 border-b px-4 backdrop-blur md:px-6"
+      className="no-print border-border/70 bg-background/95 supports-[backdrop-filter]:bg-background/80 sticky top-0 z-30 flex h-16 items-center gap-3 border-b px-4 backdrop-blur md:px-6"
     >
       <Button
         type="button"
