@@ -4,7 +4,7 @@ A clean, modern, web-based Point of Sale (POS) system for a small coffee shop â€
 
 ## Live Demo
 
-**[https://nextjs-baophuccoder.vercel.app](https://nextjs-baophuccoder.vercel.app)**
+**[https://pos-coffee-neon.vercel.app](https://pos-coffee-neon.vercel.app)**
 
 ### Demo Credentials
 
