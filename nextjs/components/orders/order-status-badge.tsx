@@ -9,11 +9,6 @@ const STATUS_CONFIG: Record<
   OrderStatus,
   { label: string; className: string }
 > = {
-  pending: {
-    label: "Pending",
-    className:
-      "bg-amber-100 text-amber-800 border-amber-200 hover:bg-amber-100 dark:bg-amber-900/30 dark:text-amber-400 dark:border-amber-800",
-  },
   preparing: {
     label: "Preparing",
     className:
@@ -37,7 +32,7 @@ const STATUS_CONFIG: Record<
 }
 
 export function OrderStatusBadge({ status }: OrderStatusBadgeProps) {
-  const config = STATUS_CONFIG[status] ?? STATUS_CONFIG.pending
+  const config = STATUS_CONFIG[status] ?? STATUS_CONFIG.preparing
   return (
     <Badge
       variant="outline"
