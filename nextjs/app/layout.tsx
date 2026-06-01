@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next"
 import { Inter } from "next/font/google"
+import { RouteGuard } from "@/components/auth/route-guard"
 import { Toaster } from "@/components/ui/sonner"
 import "./globals.css"
 
@@ -39,7 +40,7 @@ export default function RootLayout({
       className={`${inter.variable} h-full antialiased`}
     >
       <body className="bg-background text-foreground min-h-full font-sans">
-        {children}
+        <RouteGuard>{children}</RouteGuard>
         <Toaster richColors closeButton position="top-right" />
       </body>
     </html>
