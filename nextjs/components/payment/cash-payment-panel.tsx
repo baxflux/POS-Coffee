@@ -11,7 +11,8 @@ import { roundCurrency } from "@/lib/totals"
 
 interface CashPaymentPanelProps {
   total: number
-  onComplete: () => void
+  /** Called with the tendered amount when the cashier completes the payment. */
+  onComplete: (tenderedAmount: number) => void
   disabled?: boolean
 }
 
@@ -44,9 +45,7 @@ export function CashPaymentPanel({
   const tendered = raw === "" ? NaN : parseFloat(raw)
   const isValidNumber = !isNaN(tendered) && isFinite(tendered) && tendered >= 0
   const isSufficient = isValidNumber && tendered >= total
-  const change = isSufficient
-    ? roundCurrency(tendered - total)
-    : null
+  const change = isSufficient ? roundCurrency(tendered - total) : null
 
   const showShortfall = isValidNumber && !isSufficient
 
@@ -62,6 +61,12 @@ export function CashPaymentPanel({
         ? `${parts[0]}.${parts.slice(1).join("")}`
         : cleaned
     setRaw(normalised)
+  }
+
+  const handleComplete = () => {
+    if (isSufficient) {
+      onComplete(tendered)
+    }
   }
 
   return (
@@ -143,7 +148,7 @@ export function CashPaymentPanel({
         className="w-full"
         disabled={!isSufficient || disabled}
         data-testid="cash-complete-button"
-        onClick={onComplete}
+        onClick={handleComplete}
       >
         Complete Payment
       </Button>
