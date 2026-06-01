@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { ArrowLeft, Loader2, Receipt } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
@@ -39,11 +39,20 @@ export function PaymentWorkspace() {
   const createOrder = useOrdersStore((state) => state.createOrder)
   const session = useAuthStore((state) => state.session)
 
+  const markPaid = useOrdersStore((state) => state.markPaid)
+
   const [method, setMethod] = useState<PaymentMethod>("cash")
   const [isProcessing, setIsProcessing] = useState(false)
 
   // Guards against creating a second order if the cashier double-clicks.
   const orderCreatedRef = useRef(false)
+
+  // Redirect to /order when cart is empty and no payment is in flight.
+  useEffect(() => {
+    if (items.length === 0 && !isProcessing) {
+      router.push("/order")
+    }
+  }, [items.length, isProcessing, router])
 
   const subtotal = items.reduce((sum, item) => sum + item.lineTotal, 0)
   const tax = 0 // MVP — no tax
@@ -63,6 +72,7 @@ export function PaymentWorkspace() {
       cashierId: session.userId,
       cashierName: session.displayName,
     })
+    markPaid(order.id, method)
 
     clearCart()
     toast.success(
@@ -91,6 +101,7 @@ export function PaymentWorkspace() {
         cashierId: session.userId,
         cashierName: session.displayName,
       })
+      markPaid(order.id, method)
       clearCart()
       toast.success(
         `Order ${order.ticketNumber} placed — ${formatCurrency(order.total)}.`

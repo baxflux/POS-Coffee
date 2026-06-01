@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react"
 import { CreditCard, Receipt, ShoppingBag, Trash2 } from "lucide-react"
 import { useRouter } from "next/navigation"
+import { toast } from "sonner"
 
 import { ConfirmDialog } from "@/components/menu/confirm-dialog"
 import { Button } from "@/components/ui/button"
@@ -10,7 +11,6 @@ import { Separator } from "@/components/ui/separator"
 import { formatCurrency } from "@/lib/order-validation"
 import { useCartStore } from "@/stores"
 import type { OrderLineItem } from "@/types"
-import { toast } from "sonner"
 
 import { CartLineItem } from "./cart-line-item"
 
